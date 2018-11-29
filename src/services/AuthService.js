@@ -1,6 +1,10 @@
 import Api from "./Api";
 
 export default {
+  getServerToken(token) {
+    return Api().post("/auth/google", { token });
+  },
+
   signUp(email, password) {
     return Api().post("/auth/signup", { email, password });
   },

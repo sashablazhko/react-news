@@ -1,0 +1,10 @@
+.News{
+  padding: 15px 0;
+  min-height: 100%;
+}
+
+.News ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

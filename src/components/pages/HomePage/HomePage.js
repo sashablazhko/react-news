@@ -8,7 +8,7 @@ import LastReading from "../../LastReading/LastReading";
 
 class Home extends Component {
   componentDidMount() {
-    this.props.loadAllBooks();
+    // this.props.loadAllBooks();
   }
 
   render() {

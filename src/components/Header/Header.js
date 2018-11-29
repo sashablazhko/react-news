@@ -10,7 +10,7 @@ export class Header extends Component {
     return (
       <header className={this.cls.join(" ")}>
         <div className={classes.logo}>
-          <Link to="/">Book4U</Link>
+          <Link to="/">Главная</Link>
         </div>
 
         <div className={classes.options}>

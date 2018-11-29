@@ -3,7 +3,7 @@ import { apiHost } from "../config";
 
 export default () => {
   return axios.create({
-    baseURL: `${apiHost}/api`,
+    baseURL: `${apiHost}`,
     withCredentials: false,
     headers: {
       Accept: "application/json",

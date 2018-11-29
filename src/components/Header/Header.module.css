@@ -9,7 +9,7 @@
   align-content: stretch;
   padding: 0 74px 0 30px;
   height: 50px;
-  background-color: rgba(174,62,62,1);
+  background-color: rgba(140,67,67,1);
   color: #fff;
 }
 
@@ -20,6 +20,10 @@
 .Header .logo a{
   color: #fff;
   text-decoration: none;
+}
+
+.Header .logo a:hover{
+  opacity: .7;
 }
 
 

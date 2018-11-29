@@ -2,21 +2,16 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 
+import bg from "../../resources/images/bg.jpg";
 import ProtectedRoute from "../../hoc/ProtectedRoute/ProtectedRoute";
 import Layout from "../../hoc/Layout/Layout";
-import HomePage from "../pages/HomePage/HomePage";
-import bg from "../../resources/images/bg.jpg";
-import BookPage from "../pages/BookPage/BookPage";
-import ChapterPage from "../pages/ChapterPage/ChapterPage";
-import AuthPage from "../pages/AuthPage/AuthPage";
 import Loader from "../UI/Loader/Loader";
+import NewsPage from "../pages/NewsPage/NewsPage";
+import NewsDetailPage from "../pages/NewsDetailPage/NewsDetailPage";
+import NewsEditlPage from "../pages/NewsEditlPage/NewsEditlPage";
 
-const AsyncAdmin = Loadable({
-  loader: () => import("../../hoc/Admin/Admin"),
-  loading: Loader,
-});
-const AsyncUserCabinetPage = Loadable({
-  loader: () => import("../pages/UserCabinetPage/UserCabinetPage"),
+const AsyncMyNewsPage = Loadable({
+  loader: () => import("../pages/MyNewsPage/MyNewsPage"),
   loading: Loader,
 });
 
@@ -25,13 +20,10 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
-          <Route path="/book/:idBook/:idChapter" component={ChapterPage} />
-          <Route path="/book/:idBook" component={props => <BookPage bg={bg} {...props} />} />
-          <Route path="/auth/signin" component={props => <AuthPage bg={bg} {...props} />} />
-          <Route path="/auth/signup" component={props => <AuthPage bg={bg} singup {...props} />} />
-          <ProtectedRoute path="/cabinet" component={AsyncUserCabinetPage} />
-          <Route path="/admin" component={AsyncAdmin} />
-          <Route exact path="/" component={props => <HomePage bg={bg} {...props} />} />
+          <ProtectedRoute path="/news/my" component={AsyncMyNewsPage} />
+          <Route path="news/:newsId/edit" component={props => <NewsEditlPage bg={bg} {...props} />} />
+          <Route path="/news/:newsId" component={NewsDetailPage} />
+          <Route exact path="/" component={props => <NewsPage bg={bg} {...props} />} />
         </Switch>
       </Layout>
     );

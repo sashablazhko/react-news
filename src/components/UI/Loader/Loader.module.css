@@ -12,8 +12,8 @@
   height: 0;
   margin: 6px;
   box-sizing: border-box;
-  border: 26px solid rgba(174,62,62,1);
-  border-color: rgba(174,62,62,1) transparent rgba(174,62,62,1) transparent;
+  border: 26px solid rgba(140,67,67,1);
+  border-color: rgba(140,67,67,1) transparent rgba(140,67,67,1) transparent;
   animation: lds-hourglass 1.2s infinite;
 }
 .center{

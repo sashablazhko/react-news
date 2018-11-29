@@ -4,7 +4,6 @@
 
 .AuthMenu i{
   font-size: 20px;
-  cursor: pointer;
   color: #fff;
   transition: opacity, right .22s ease-in, color .5s ease;
 }
@@ -25,18 +24,38 @@
   display: block;
 }
 
+.AuthMenu .name{
+  background-color: rgba(73,189,76, .8);
+  text-align: center;
+  padding: 0 5px;
+  margin: 0;
+  list-style: none;
+}
 .AuthMenu .submenu{
-  background-color: rgba(174,62,62, .8);
+  background-color: rgba(140,67,67, .8);
   text-align: center;
   padding: 0 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  margin: 0;
+  list-style: none;
 }
 
-.AuthMenu .submenu p{
+.AuthMenu .name p{
   margin: 0;
   padding: 15px 0;
-  border-bottom: 1px solid rgba(174,62,62, 1);
+}
+
+.AuthMenu .submenu li{
+  margin: 0;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(140,67,67, 1);
+  cursor: pointer;
+  min-width: 190px;
+}
+
+.AuthMenu .submenu li:hover{
+  opacity: .7;
 }
 
 .AuthMenu .submenu p:last-child{

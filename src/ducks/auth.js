@@ -1,12 +1,16 @@
 import Auth from "../services/AuthService";
-import { Record, Map } from "immutable";
+import { Record } from "immutable";
+
+const UserRecord = Record({
+  id: null,
+  accessToken: null,
+  email: null,
+  name: null,
+  expirationDate: null,
+});
 
 const ReducerState = Record({
-  user: new Map({
-    accessToken: null,
-    email: null,
-    expirationDate: null,
-  }),
+  user: new UserRecord(),
   loading: false,
   error: null,
   errorMsg: null,
@@ -19,6 +23,9 @@ export const SIGN_UP_ERROR = `${moduleName}/SIGN_UP_ERROR`;
 export const SIGN_IN_REQUEST = `${moduleName}/SIGN_IN_REQUEST`;
 export const SIGN_IN_SUCCESS = `${moduleName}/SIGN_IN_SUCCESS`;
 export const SIGN_IN_ERROR = `${moduleName}/SIGN_IN_ERROR`;
+export const SIGN_OUT_REQUEST = `${moduleName}/SIGN_OUT_REQUEST`;
+export const SIGN_OUT_SUCCESS = `${moduleName}/SIGN_OUT_SUCCESS`;
+export const SIGN_OUT_ERROR = `${moduleName}/SIGN_OUT_ERROR`;
 
 export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
@@ -46,8 +53,10 @@ export default function reducer(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
+        .setIn(["user", "id"], payload.id)
         .setIn(["user", "accessToken"], payload.accessToken)
         .setIn(["user", "email"], payload.email)
+        .setIn(["user", "name"], payload.name)
         .setIn(["user", "expirationDate"], payload.expirationDate);
 
     case SIGN_IN_ERROR:
@@ -55,6 +64,9 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loading", false)
         .set("error", true)
         .set("errorMsg", "Проблемы с авторизацией");
+
+    case SIGN_OUT_SUCCESS:
+      return new ReducerState();
 
     default:
       return state;
@@ -116,6 +128,86 @@ export function signIn(email, password) {
         console.log("SIGN IN ERR", err);
         dispatch({
           type: SIGN_IN_ERROR,
+          err,
+        });
+      }
+    );
+  };
+}
+
+export function signInGoogle() {
+  return dispatch => {
+    dispatch({
+      type: SIGN_IN_REQUEST,
+    });
+
+    window.gapi.load("auth2", function() {
+      window.gapi.auth2
+        .init({
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        })
+        .then(
+          GoogleAuth => {
+            GoogleAuth.signIn({
+              scope: "profile email",
+            }).then(
+              user => {
+                const googleToken = user.getAuthResponse(true).id_token;
+                Auth.getServerToken(googleToken).then(
+                  res => {
+                    const base64Url = res.data.token.split(".")[1];
+                    const base64 = base64Url.replace("-", "+").replace("_", "/");
+                    const serverAuthRes = JSON.parse(window.atob(base64));
+                    dispatch({
+                      type: SIGN_IN_SUCCESS,
+                      payload: {
+                        id: serverAuthRes.id,
+                        accessToken: res.data.token,
+                        name: user.getBasicProfile().getName(),
+                        email: user.getBasicProfile().getEmail(),
+                        expirationDate: new Date(serverAuthRes.exp * 1000),
+                      },
+                    });
+                  },
+                  err => {
+                    console.log("SIGN IN LOCAL SERVICE ERR", err);
+                    dispatch({
+                      type: SIGN_IN_ERROR,
+                      err,
+                    });
+                  }
+                );
+              },
+              err => {
+                console.log("SIGN IN GOOGLE ERR", err);
+                dispatch({
+                  type: SIGN_IN_ERROR,
+                  err,
+                });
+              }
+            );
+          },
+          err => {
+            console.log("GOOGLE INIT ERR", err);
+          }
+        );
+    });
+  };
+}
+
+export function signOutGoogle() {
+  return dispatch => {
+    const googleAuth = window.gapi.auth2.getAuthInstance();
+    googleAuth.signOut().then(
+      res => {
+        dispatch({
+          type: SIGN_OUT_SUCCESS,
+        });
+      },
+      err => {
+        console.log("SIGN OUT GOOGLE ERR", err);
+        dispatch({
+          type: SIGN_OUT_ERROR,
           err,
         });
       }
