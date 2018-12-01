@@ -1,9 +1,9 @@
-.News{
+.NewsPage{
   padding: 15px 0;
   min-height: 100%;
 }
 
-.News ul{
+.NewsPage ul{
   margin: 0;
   padding: 0;
   list-style: none;

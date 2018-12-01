@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import classes from "./NewsPage.module.css";
 import { connect } from "react-redux";
 import Loader from "../../UI/Loader/Loader";
 import NewsCard from "../../NewsCard/NewsCard";
@@ -8,24 +9,31 @@ import { mapToArr } from "../../../helpers";
 
 export class NewsPage extends Component {
   componentDidMount() {
-    const { loaded, loading, loadAllNews } = this.props;
-    if (!loaded && !loading) loadAllNews();
+    console.log("111", 111);
+    const { loadedList, loadingList, loadAllNews } = this.props;
+    if (!loadedList && !loadingList) loadAllNews();
   }
 
   render() {
-    const { news, loading } = this.props;
-    if (loading) return <Loader />;
+    const { news, loadingList } = this.props;
+    if (loadingList) return <Loader />;
     const newsElements = mapToArr(news).map(item => <NewsCard key={item._id} {...item.toJS()} />);
 
-    return <ul>{newsElements}</ul>;
+    return (
+      <div className={classes.NewsPage} style={{ background: `url(${this.props.bg})` }}>
+        <div className="container container__padding background">
+          <ul>{newsElements}</ul>
+        </div>
+      </div>
+    );
   }
 }
 
 export default connect(
   state => ({
     news: state[moduleName].entities,
-    loaded: state[moduleName].loaded,
-    loading: state[moduleName].loading,
+    loadedList: state[moduleName].loadedList,
+    loadingList: state[moduleName].loadingList,
   }),
   { loadAllNews }
 )(NewsPage);

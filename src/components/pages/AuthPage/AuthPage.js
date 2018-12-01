@@ -20,7 +20,7 @@ const AuthPage = props => {
 
   return (
     <div className={classes.AuthPage} style={{ background: `url(${props.bg})` }}>
-      <div className="container container__small">
+      <div className="container container__padding container__small">
         <div className="centerblock background">{renderBody()}</div>
       </div>
     </div>

@@ -8,10 +8,6 @@
   transition: opacity, right .22s ease-in, color .5s ease;
 }
 
-.AuthMenu i:hover{
-  opacity: .7;
-}
-
 .AuthMenu .submenu_wrapper{
   position: absolute;
   left: auto;

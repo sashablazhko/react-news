@@ -4,6 +4,7 @@
   border-radius: 5px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
   padding: 5px;
+  position: relative;
 }
 
 .NewsCard:last-child{
@@ -21,6 +22,7 @@
 .NewsCard h2{
   margin-top: 0px;
   margin-bottom: 5px;
+  padding-right: 50px;
 }
 
 .NewsCard .info{

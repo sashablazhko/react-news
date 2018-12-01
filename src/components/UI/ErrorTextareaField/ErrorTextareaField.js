@@ -1,7 +1,7 @@
 import React from "react";
-import classes from "./ErrorFormField.module.css";
+import classes from "./ErrorTextareaField.module.css";
 
-const ErrorFormField = props => {
+const ErrorTextareaField = props => {
   const {
     input,
     label,
@@ -10,12 +10,12 @@ const ErrorFormField = props => {
   } = props;
   const errorText = touched && error && <div className={classes.error}>{error}</div>;
   return (
-    <div className={classes.ErrorFormField}>
+    <div className={classes.ErrorTextareaField}>
       <label>{label}</label>
-      <input {...input} type={type} />
+      <textarea {...input} type={type} />
       {errorText}
     </div>
   );
 };
 
-export default ErrorFormField;
+export default ErrorTextareaField;

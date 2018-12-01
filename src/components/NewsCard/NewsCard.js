@@ -20,6 +20,16 @@ const NewsCard = props => {
         <span className="date">{createDateFormated}</span>
       </div>
       <div className="content">{content.length < 200 ? content : truncateString(content)}</div>
+      <div className="action">
+        <div className="edit">
+          <Link to={`/news/${_id}/edit`}>
+            <i className="fas fa-pencil-alt" />
+          </Link>
+        </div>
+        <div className="del">
+          <i className="fas fa-times" />
+        </div>
+      </div>
     </li>
   );
 };

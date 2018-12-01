@@ -362,6 +362,9 @@ template {
   box-sizing: border-box;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.container__padding{
   padding: 10px;
 }
 
@@ -390,4 +393,24 @@ template {
   display: flex;
   height: 64px;
   align-items: center;
+}
+
+.action{
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 50px;
+}
+
+.action i{
+  cursor: pointer;
+  color: rgba(140,67,67,1);
+}
+
+.action i:hover{
+  opacity: .7;
 }

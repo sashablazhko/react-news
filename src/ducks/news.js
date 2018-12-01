@@ -17,8 +17,10 @@ const NewsRecord = Record({
 
 const ReducerState = Record({
   entities: new OrderedMap({}),
-  loading: false,
-  loaded: false,
+  loadingList: false,
+  loadedList: false,
+  loadingItem: false,
+  loadedItem: false,
   error: null,
   errorMsg: null,
 });
@@ -27,27 +29,49 @@ export const moduleName = "news";
 export const FETCH_ALL_NEWS_REQUEST = `${moduleName}/FETCH_ALL_NEWS_REQUEST`;
 export const FETCH_ALL_NEWS_SECCESS = `${moduleName}/FETCH_ALL_NEWS_SECCESS`;
 export const FETCH_ALL_NEWS_ERROR = `${moduleName}/FETCH_ALL_NEWS_ERROR`;
+export const FETCH_NEWS_ITEM_REQUEST = `${moduleName}/FETCH_NEWS_ITEM_REQUEST`;
+export const FETCH_NEWS_ITEM_SECCESS = `${moduleName}/FETCH_NEWS_ITEM_SECCESS`;
+export const FETCH_NEWS_ITEM_ERROR = `${moduleName}/FETCH_NEWS_ITEM_ERROR`;
 
 export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
 
   switch (type) {
     case FETCH_ALL_NEWS_REQUEST: {
-      return state.set("loading", true);
+      return state.set("loadingList", true);
+    }
+
+    case FETCH_NEWS_ITEM_REQUEST: {
+      return state.set("loadingItem", true);
     }
 
     case FETCH_ALL_NEWS_SECCESS:
+      console.log("payloadAll", payload);
       return state
-        .set("loading", false)
-        .set("loaded", true)
+        .set("loadingList", false)
+        .set("loadedList", true)
         .set("error", null)
         .update("entities", entities => arrToMap(payload.news, "_id", NewsRecord).merge(entities));
 
+    case FETCH_NEWS_ITEM_SECCESS:
+      console.log("payloadItem", payload);
+      return state
+        .set("loadingItem", false)
+        .set("loadedItem", true)
+        .set("error", null)
+        .update("entities", entities => arrToMap([payload.item], "_id", NewsRecord).merge(entities));
+
     case FETCH_ALL_NEWS_ERROR:
       return state
-        .set("loading", false)
+        .set("loadingList", false)
         .set("error", true)
         .set("errorMsg", "Проблемы с загрузкой статей");
+
+    case FETCH_NEWS_ITEM_ERROR:
+      return state
+        .set("loadingItem", false)
+        .set("error", true)
+        .set("errorMsg", "Проблемы с загрузкой статьи");
 
     default:
       return state;
@@ -73,6 +97,32 @@ export function loadAllNews() {
         console.log("LOAD ALL NEWS ERR", err);
         dispatch({
           type: FETCH_ALL_NEWS_ERROR,
+          err,
+        });
+      }
+    );
+  };
+}
+
+export function loadNewsItem(newsId) {
+  return dispatch => {
+    dispatch({
+      type: FETCH_NEWS_ITEM_REQUEST,
+    });
+
+    News.getNewsItem(newsId).then(
+      res => {
+        dispatch({
+          type: FETCH_NEWS_ITEM_SECCESS,
+          payload: {
+            item: res.data.feed,
+          },
+        });
+      },
+      err => {
+        console.log("LOAD  NEWS ITEM ERR", err);
+        dispatch({
+          type: FETCH_NEWS_ITEM_ERROR,
           err,
         });
       }

@@ -8,7 +8,7 @@ import Layout from "../../hoc/Layout/Layout";
 import Loader from "../UI/Loader/Loader";
 import NewsPage from "../pages/NewsPage/NewsPage";
 import NewsDetailPage from "../pages/NewsDetailPage/NewsDetailPage";
-import NewsEditlPage from "../pages/NewsEditlPage/NewsEditlPage";
+import NewsEditPage from "../pages/NewsEditPage/NewsEditPage";
 
 const AsyncMyNewsPage = Loadable({
   loader: () => import("../pages/MyNewsPage/MyNewsPage"),
@@ -21,7 +21,8 @@ class App extends Component {
       <Layout>
         <Switch>
           <ProtectedRoute path="/news/my" component={AsyncMyNewsPage} />
-          <Route path="news/:newsId/edit" component={props => <NewsEditlPage bg={bg} {...props} />} />
+          <Route path="/news/:newsId/edit" component={NewsEditPage} />
+          <Route path="/news/new" component={() => <NewsEditPage create />} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
           <Route exact path="/" component={props => <NewsPage bg={bg} {...props} />} />
         </Switch>

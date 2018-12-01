@@ -7,6 +7,7 @@ const links = [
   { to: "/", label: "На главную", exact: true },
   { to: "/news/new", label: "Создать новость", exact: false },
   { to: "/news/my", label: "Мои новости", exact: false },
+  { to: "/news/5bff169718eeef007c862942/edit", label: "edit", exact: false },
 ];
 
 export class Drawer extends Component {
