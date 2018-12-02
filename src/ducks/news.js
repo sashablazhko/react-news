@@ -46,7 +46,6 @@ export default function reducer(state = new ReducerState(), action) {
     }
 
     case FETCH_ALL_NEWS_SECCESS:
-      console.log("payloadAll", payload);
       return state
         .set("loadingList", false)
         .set("loadedList", true)
@@ -54,7 +53,6 @@ export default function reducer(state = new ReducerState(), action) {
         .update("entities", entities => arrToMap(payload.news, "_id", NewsRecord).merge(entities));
 
     case FETCH_NEWS_ITEM_SECCESS:
-      console.log("payloadItem", payload);
       return state
         .set("loadingItem", false)
         .set("loadedItem", true)

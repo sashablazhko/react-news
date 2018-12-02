@@ -14,7 +14,14 @@ const NewsEditPage = props => {
     if (props.create) {
       return <NewsEdit onSubmit={handleCreate} loading={props.loading} create />;
     } else {
-      return <NewsEdit onSubmit={handleEdit} onDelete={handleDelete} loading={props.loading} />;
+      return (
+        <NewsEdit
+          onSubmit={handleEdit}
+          onDelete={handleDelete}
+          id={props.match.params.newsId}
+          loading={props.loading}
+        />
+      );
     }
   };
 
