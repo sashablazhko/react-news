@@ -20,7 +20,6 @@ const ReducerState = Record({
   loadingList: false,
   loadedList: false,
   loadingItem: false,
-  loadedItem: false,
   error: null,
   errorMsg: null,
 });
@@ -55,7 +54,6 @@ export default function reducer(state = new ReducerState(), action) {
     case FETCH_NEWS_ITEM_SECCESS:
       return state
         .set("loadingItem", false)
-        .set("loadedItem", true)
         .set("error", null)
         .update("entities", entities => arrToMap([payload.item], "_id", NewsRecord).merge(entities));
 

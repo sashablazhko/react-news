@@ -20,22 +20,9 @@ export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
 
   switch (type) {
-    case SET_DATA_ON_EDIT:
-      return state.setIn(["edited", "title"], payload.title).setIn(["edited", "content"], payload.content);
-
     default:
       return state;
   }
-}
-
-export function setDataOnEdit(title = null, content = null) {
-  return {
-    type: SET_DATA_ON_EDIT,
-    payload: {
-      title,
-      content,
-    },
-  };
 }
 
 export function createNews() {

@@ -42,7 +42,7 @@ export default connect(
     return {
       item: state[moduleName].entities.get(ownProps.match.params.newsId),
       loadingItem: state[moduleName].loadingItem,
-      loadedItem: state[moduleName].loadedItem,
+      loadedItem: state[moduleName].entities.has(ownProps.match.params.newsId),
     };
   },
   { loadNewsItem }

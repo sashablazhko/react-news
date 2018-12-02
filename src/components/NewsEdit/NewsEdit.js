@@ -1,54 +1,77 @@
 import React, { Component } from "react";
 import classes from "./NewsEdit.module.css";
-import { reduxForm, Field } from "redux-form";
+import { Form, Field } from "react-final-form";
+import { Link } from "react-router-dom";
 
-import { compose } from "redux";
 import { connect } from "react-redux";
 import { moduleName, setDataOnEdit } from "../../ducks/edit";
 
-import ErrorInputField from "../UI/ErrorInputField/ErrorInputField";
-import ErrorTextareaField from "../UI/ErrorTextareaField/ErrorTextareaField";
-
 export class NewsEdit extends Component {
-  componentDidMount() {
-    console.log("this.props", this.props);
-    const { id, item } = this.props;
-    if (id) {
-      this.props.setDataOnEdit(item.title, item.content);
-    }
-  }
-  componentWillUpdate() {
-    console.log("this.props", this.props);
-    const { id, item } = this.props;
-    if (id) {
-      this.props.setDataOnEdit(item.title, item.content);
-    }
-  }
-
   render() {
-    const { create } = this.props;
-    console.log("this.props", this.props);
+    const { item } = this.props;
+
+    const sleep = ms => new Promise(res => setTimeout(res, ms));
+    const showResult = async val => {
+      await sleep(300);
+      window.alert(JSON.stringify(val, undefined, 4));
+    };
+    let initData = undefined;
+    if (item) {
+      initData = {
+        title: item.title,
+        content: item.content,
+      };
+    }
+
     return (
-      <div>
-        <h2>{create ? "Создать новость" : "Редактировать новость"}</h2>
-        <form>
-          <div>
-            <Field name="title" label="Заголовок" component={ErrorInputField} />
-          </div>
-          <div>
-            <Field name="content" label="Текст" component={ErrorTextareaField} type="textarea" />
-          </div>
-          <div className="btn__wrapper">
-            <div>
-              <button type="submit">Регистрация</button>
-            </div>
-            {/* {loading && <Loader />} */}
-          </div>
-        </form>
+      <div className={classes.NewsEdit}>
+        <h2>{!item ? "Создать новость" : "Редактировать новость"}</h2>
+        <Form onSubmit={showResult} initialValues={initData}>
+          {({ handleSubmit, values, submitting }) => (
+            <form onSubmit={handleSubmit}>
+              <Field name="title" placeholder="Заголовок" validate={validateTitle}>
+                {({ input, meta, placeholder }) => (
+                  <div>
+                    <label>Заголовок</label>
+                    <input {...input} placeholder={placeholder} />
+                    {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
+                  </div>
+                )}
+              </Field>
+              <Field name="content" placeholder="Заголовок" validate={validateContent}>
+                {({ input, meta, placeholder }) => (
+                  <div>
+                    <label>Текст</label>
+                    <textarea {...input} placeholder={placeholder} />
+                    {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
+                  </div>
+                )}
+              </Field>
+              <button type="submit">{!item ? "Создать" : "Сохранить"}</button>
+              <Link to={this.props.chancelPath}>
+                <button>Отменить</button>
+              </Link>
+              <pre>{JSON.stringify(values, undefined, 4)}</pre>
+            </form>
+          )}
+        </Form>
       </div>
     );
   }
 }
+
+const validateTitle = val => (val ? undefined : "Введите заголовок");
+const validateContent = val => {
+  let answer = undefined;
+  if (!val) {
+    answer = "Введите заголовок";
+  } else if (val.length < 3) {
+    answer = "Текст новости слишком короткий";
+  } else {
+    answer = undefined;
+  }
+  return answer;
+};
 
 const validate = ({ title, content }) => {
   const errors = {};
@@ -62,46 +85,4 @@ const validate = ({ title, content }) => {
   return errors;
 };
 
-// NewsEdit = reduxForm({
-//   form: "editOrCreate",
-//   validate,
-//   enableReinitialize: true,
-// })(NewsEdit);
-
-// export default connect(
-//   state => {
-//     console.log("state", state[moduleName].test);
-//     return {
-//       initialValues: state[moduleName].test,
-//     };
-//   },
-//   null,
-//   null,
-//   { pure: false }
-// )(NewsEdit);
-
-const mapStateToProps = (state, props) => {
-  let obj = {};
-  if (props.item) {
-  }
-  if (props.id) {
-    obj.item = state.news.entities.get(props.id).toJS();
-    obj.initialValues = state[moduleName].edited;
-  }
-  return obj;
-};
-
-export default compose(
-  connect(
-    mapStateToProps,
-    { setDataOnEdit },
-    null,
-    { pure: false }
-  ),
-  reduxForm({
-    form: "editOrCreate",
-    validate,
-    // enableReinitialize: true,
-    // destroyOnUnmount: false,
-  })
-)(NewsEdit);
+export default NewsEdit;
