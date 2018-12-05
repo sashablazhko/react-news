@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import classes from "./NewsEditPage.module.css";
 import { connect } from "react-redux";
 
-import { createNews, editNews, deleteNews, moduleName as editDuck } from "../../../ducks/edit";
-import { moduleName as newsDuck, loadNewsItem } from "../../../ducks/news";
+import { createNews, editNews, deleteNews, moduleName, loadNewsItem } from "../../../ducks/news";
 import NewsEdit from "../../NewsEdit/NewsEdit";
 import Loader from "../../UI/Loader/Loader";
 
@@ -16,12 +15,12 @@ class NewsEditPage extends Component {
     return {};
   }
 
-  handleCreate = ({ email, password }) => this.props.createNews(email, password);
-  handleEdit = ({ email, password }) => this.props.editNews(email, password);
-  handleDelete = ({ email, password }) => this.props.deleteNews(email, password);
+  handleCreate = ({ title, content }) => this.props.createNews(title, content);
+  handleEdit = ({ title, content }) => this.props.editNews(title, content, this.props.item._id);
+  handleDelete = () => this.props.deleteNews(this.props.item._id);
 
   render() {
-    if (this.props.loadingItem || !this.props.loadedItem) return <Loader />;
+    // if (this.props.loadingItem || !this.props.loadedItem) return <Loader />;
 
     const editOrCreate = () => {
       if (this.props.create) {
@@ -30,7 +29,6 @@ class NewsEditPage extends Component {
         return (
           <NewsEdit
             onSubmit={this.handleEdit}
-            onDelete={this.handleDelete}
             item={this.props.item}
             loading={this.props.loadingItem}
             chancelPath={`/news/${this.props.item._id}`}
@@ -48,11 +46,11 @@ class NewsEditPage extends Component {
 
 const mapStateToProps = (state, props) => {
   let obj = {
-    loadingItem: state[newsDuck].loadingItem,
+    loadingItem: state[moduleName].loadingItem,
   };
   if (props.match && props.match.params.newsId) {
-    obj.item = state[newsDuck].entities.get(props.match.params.newsId);
-    obj.loadedItem = state[newsDuck].entities.has(props.match.params.newsId);
+    obj.item = state[moduleName].entities.get(props.match.params.newsId);
+    obj.loadedItem = state[moduleName].entities.has(props.match.params.newsId);
   } else {
     obj.loadedItem = true;
   }

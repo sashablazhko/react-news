@@ -1,4 +1,7 @@
 import { OrderedMap, Record } from "immutable";
+import { all, take, put, select, call } from "redux-saga/effects";
+import { push } from "connected-react-router";
+
 import News from "../services/NewsService";
 import { arrToMap } from "../helpers";
 
@@ -28,9 +31,18 @@ export const moduleName = "news";
 export const FETCH_ALL_NEWS_REQUEST = `${moduleName}/FETCH_ALL_NEWS_REQUEST`;
 export const FETCH_ALL_NEWS_SECCESS = `${moduleName}/FETCH_ALL_NEWS_SECCESS`;
 export const FETCH_ALL_NEWS_ERROR = `${moduleName}/FETCH_ALL_NEWS_ERROR`;
-export const FETCH_NEWS_ITEM_REQUEST = `${moduleName}/FETCH_NEWS_ITEM_REQUEST`;
-export const FETCH_NEWS_ITEM_SECCESS = `${moduleName}/FETCH_NEWS_ITEM_SECCESS`;
+export const API_NEWS_ITEM_REQUEST = `${moduleName}/API_NEWS_ITEM_REQUEST`;
+export const API_NEWS_ITEM_SECCESS = `${moduleName}/API_NEWS_ITEM_SECCESS`;
 export const FETCH_NEWS_ITEM_ERROR = `${moduleName}/FETCH_NEWS_ITEM_ERROR`;
+export const EDIT_NEWS = `${moduleName}/EDIT_NEWS`;
+export const EDIT_NEWS_ERROR = `${moduleName}/EDIT_NEWS_ERROR`;
+export const CREATE_NEWS = `${moduleName}/CREATE_NEWS`;
+export const CREATE_NEWS_REQUEST = `${moduleName}/CREATE_NEWS_REQUEST`;
+export const CREATE_NEWS_SUCCESS = `${moduleName}/CREATE_NEWS_SUCCESS`;
+export const CREATE_NEWS_ERROR = `${moduleName}/CREATE_NEWS_ERROR`;
+export const DELETE_NEWS = `${moduleName}/DELETE_NEWS`;
+export const DELETE_NEWS_SUCCESS = `${moduleName}/DELETE_NEWS_SUCCESS`;
+export const DELETE_NEWS_ERROR = `${moduleName}/DELETE_NEWS_ERROR`;
 
 export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
@@ -40,7 +52,7 @@ export default function reducer(state = new ReducerState(), action) {
       return state.set("loadingList", true);
     }
 
-    case FETCH_NEWS_ITEM_REQUEST: {
+    case API_NEWS_ITEM_REQUEST: {
       return state.set("loadingItem", true);
     }
 
@@ -49,13 +61,22 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loadingList", false)
         .set("loadedList", true)
         .set("error", null)
-        .update("entities", entities => arrToMap(payload.news, "_id", NewsRecord).merge(entities));
+        .update("entities", entities => entities.merge(arrToMap(payload.news, "_id", NewsRecord)));
 
-    case FETCH_NEWS_ITEM_SECCESS:
+    case API_NEWS_ITEM_SECCESS:
       return state
         .set("loadingItem", false)
         .set("error", null)
-        .update("entities", entities => arrToMap([payload.item], "_id", NewsRecord).merge(entities));
+        .update("entities", entities => entities.merge(arrToMap([payload.item], "_id", NewsRecord)));
+
+    case DELETE_NEWS_SUCCESS:
+      return (
+        state
+          .set("loadingItem", false)
+          .set("error", null)
+          // .remove("entities", payload.id)
+          .update("entities", entities => entities.remove(payload.id))
+      );
 
     case FETCH_ALL_NEWS_ERROR:
       return state
@@ -68,6 +89,18 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loadingItem", false)
         .set("error", true)
         .set("errorMsg", "Проблемы с загрузкой статьи");
+
+    case EDIT_NEWS_ERROR:
+      return state
+        .set("loadingItem", false)
+        .set("error", true)
+        .set("errorMsg", "Проблемы с редактированием");
+
+    case DELETE_NEWS_ERROR:
+      return state
+        .set("loadingItem", false)
+        .set("error", true)
+        .set("errorMsg", "Проблемы с удалением");
 
     default:
       return state;
@@ -103,13 +136,13 @@ export function loadAllNews() {
 export function loadNewsItem(newsId) {
   return dispatch => {
     dispatch({
-      type: FETCH_NEWS_ITEM_REQUEST,
+      type: API_NEWS_ITEM_REQUEST,
     });
 
     News.getNewsItem(newsId).then(
       res => {
         dispatch({
-          type: FETCH_NEWS_ITEM_SECCESS,
+          type: API_NEWS_ITEM_SECCESS,
           payload: {
             item: res.data.feed,
           },
@@ -125,3 +158,125 @@ export function loadNewsItem(newsId) {
     );
   };
 }
+
+export function createNews(title, content) {
+  return {
+    type: CREATE_NEWS,
+    payload: { title, content },
+  };
+}
+
+const createNewsSaga = function*() {
+  while (true) {
+    const action = yield take(CREATE_NEWS);
+
+    yield put({
+      type: CREATE_NEWS,
+    });
+
+    try {
+      const getToken = state => state.auth.user.accessToken;
+      const token = yield select(getToken);
+      const editData = yield call(News.createNews, action.payload.title, action.payload.content, token);
+      console.log("editData", editData);
+      yield put({
+        type: API_NEWS_ITEM_SECCESS,
+        payload: {
+          item: editData.data.feed,
+        },
+      });
+      yield put(push("/"));
+    } catch (err) {
+      console.log("err in createNewsSaga", err);
+      yield put({
+        type: CREATE_NEWS_ERROR,
+        err,
+      });
+    }
+  }
+};
+
+export function editNews(title, content, id) {
+  return {
+    type: EDIT_NEWS,
+    payload: { title, content, id },
+  };
+}
+
+const editNewsSaga = function*() {
+  while (true) {
+    const action = yield take(EDIT_NEWS);
+
+    yield put({
+      type: API_NEWS_ITEM_REQUEST,
+    });
+
+    try {
+      const getToken = state => state.auth.user.accessToken;
+      const token = yield select(getToken);
+      const editData = yield call(
+        News.updateNewsItem,
+        action.payload.title,
+        action.payload.content,
+        action.payload.id,
+        token
+      );
+      yield put({
+        type: API_NEWS_ITEM_SECCESS,
+        payload: {
+          item: editData.data.feed,
+        },
+      });
+      yield put(push(`/news/${action.payload.id}`));
+    } catch (err) {
+      console.log("err in editNewsSaga", err);
+      yield put({
+        type: EDIT_NEWS_ERROR,
+        err,
+      });
+    }
+  }
+};
+
+export function deleteNews(id) {
+  return {
+    type: DELETE_NEWS,
+    payload: {
+      id,
+    },
+  };
+}
+
+const deleteNewsSaga = function*() {
+  while (true) {
+    const action = yield take(DELETE_NEWS);
+
+    yield put({
+      type: API_NEWS_ITEM_REQUEST,
+    });
+
+    try {
+      const getToken = state => state.auth.user.accessToken;
+      const token = yield select(getToken);
+      const editData = yield call(News.deleteNewsItem, action.payload.id, token);
+      console.log("editData", editData);
+      yield put({
+        type: DELETE_NEWS_SUCCESS,
+        payload: {
+          id: editData.data._id,
+        },
+      });
+      yield put(push("/"));
+    } catch (err) {
+      console.log("err in deleteNewsSaga", err);
+      yield put({
+        type: DELETE_NEWS_ERROR,
+        err,
+      });
+    }
+  }
+};
+
+export const saga = function*() {
+  yield all([editNewsSaga(), createNewsSaga(), deleteNewsSaga()]);
+};

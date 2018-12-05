@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import classes from "./NewsDetailPage.module.css";
 import { connect } from "react-redux";
-import { moduleName, loadNewsItem } from "../../../ducks/news";
+import { Link } from "react-router-dom";
+import { moduleName, loadNewsItem, deleteNews } from "../../../ducks/news";
 import Loader from "../../UI/Loader/Loader";
+import Button from "../../UI/Button/Button";
+import IconActions from "../../UI/IconActions/IconActions";
 
 export class NewsDetailPage extends Component {
   componentDidMount() {
@@ -20,6 +23,7 @@ export class NewsDetailPage extends Component {
       month: "long",
       day: "2-digit",
     }).format(new Date(createDate));
+    const usersNews = this.props.userId === this.props.item.creator._id;
     return (
       <div className={classes.NewsDetailPage}>
         <div className="container">
@@ -30,7 +34,30 @@ export class NewsDetailPage extends Component {
               <span className="date">{createDateFormated}</span>
             </div>
             <div className="content">{content}</div>
+            {usersNews && (
+              <IconActions
+                id={this.props.item._id}
+                deleteNews={() =>
+                  window.confirm("Вы точно хотите удалить новость?") && this.props.deleteNews(this.props.item._id)
+                }
+              />
+            )}
           </div>
+          {usersNews && (
+            <div className="btnactions">
+              <Link to={`/news/${this.props.item._id}/edit`}>
+                <Button view="primary">Редактировать</Button>
+              </Link>
+              <Button
+                view="danger"
+                onClick={() =>
+                  window.confirm("Вы точно хотите удалить новость?") && this.props.deleteNews(this.props.item._id)
+                }
+              >
+                Удалить
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -43,7 +70,8 @@ export default connect(
       item: state[moduleName].entities.get(ownProps.match.params.newsId),
       loadingItem: state[moduleName].loadingItem,
       loadedItem: state[moduleName].entities.has(ownProps.match.params.newsId),
+      userId: state.auth.user.id,
     };
   },
-  { loadNewsItem }
+  { loadNewsItem, deleteNews }
 )(NewsDetailPage);

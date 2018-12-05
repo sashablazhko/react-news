@@ -8,7 +8,7 @@
   padding: 50px 10px 0;
   box-sizing: border-box;
   background: #fff;
-  z-index: 90;
+  z-index: 100;
   transform: translateX(0px);
   transition: transform .22s ease-in;
   overflow: auto;

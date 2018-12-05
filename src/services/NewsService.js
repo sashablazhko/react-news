@@ -4,19 +4,16 @@ export default {
   getAllNews() {
     return Api().get("/feeds");
   },
-  createNews(title, content) {
-    const item = { title, content };
-    return Api().post("/feeds", { item });
+  createNews(title, content, token = null) {
+    return Api(token).post("/feeds", { title, content });
   },
   getNewsItem(newsId) {
     return Api().get(`/feeds/${newsId}`);
   },
-  updateNewsItem(newsId, title, content) {
-    const id = newsId;
-    const feed = { title, content };
-    return Api().put(`/feeds/${newsId}`, { id, feed });
+  updateNewsItem(title, content, id, token = null) {
+    return Api(token).put(`/feeds/${id}`, { title, content });
   },
-  deleteNewsItem(newsId) {
-    return Api().delete(`/feeds/${newsId}`, { id: newsId });
+  deleteNewsItem(id, token = null) {
+    return Api(token).delete(`/feeds/${id}`);
   },
 };

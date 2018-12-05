@@ -2,9 +2,10 @@ import React from "react";
 import classes from "./NewsCard.module.css";
 import { Link } from "react-router-dom";
 import { truncateString } from "../../helpers";
+import IconActions from "../UI/IconActions/IconActions";
 
 const NewsCard = props => {
-  const { _id, title, createDate, content } = props;
+  const { _id, title, createDate, content, deleteNews, usersNews } = props;
   const createDateFormated = new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
     month: "long",
@@ -20,16 +21,7 @@ const NewsCard = props => {
         <span className="date">{createDateFormated}</span>
       </div>
       <div className="content">{content.length < 200 ? content : truncateString(content)}</div>
-      <div className="action">
-        <div className="edit">
-          <Link to={`/news/${_id}/edit`}>
-            <i className="fas fa-pencil-alt" />
-          </Link>
-        </div>
-        <div className="del">
-          <i className="fas fa-times" />
-        </div>
-      </div>
+      {usersNews && <IconActions id={_id} deleteNews={deleteNews} />}
     </li>
   );
 };

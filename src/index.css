@@ -414,3 +414,12 @@ template {
 .action i:hover{
   opacity: .7;
 }
+
+.row{
+  margin-bottom: 15px;
+}
+
+.btnactions{
+  display: flex;
+  justify-content: space-between;
+}
