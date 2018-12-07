@@ -1,6 +1,7 @@
-import { saga as editSaga } from "../ducks/edit";
+import { saga as newsSaga } from "../ducks/news";
+import { saga as authSaga } from "../ducks/auth";
 import { all } from "redux-saga/effects";
 
 export default function* rootSaga() {
-  yield all([editSaga()]);
+  yield all([newsSaga(), authSaga()]);
 }

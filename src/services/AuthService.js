@@ -1,8 +1,8 @@
 import Api from "./Api";
 
 export default {
-  getServerToken(token) {
-    return Api().post("/auth/google", { token });
+  getServerToken(googleToken) {
+    return Api().post("/auth/google", { token: googleToken });
   },
 
   signUp(email, password) {

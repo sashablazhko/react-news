@@ -20,8 +20,8 @@ class App extends Component {
       <Layout>
         <Switch>
           <ProtectedRoute path="/news/my" component={AsyncMyNewsPage} />
-          <Route path="/news/:newsId/edit" component={NewsEditPage} />
-          <Route path="/news/new" component={() => <NewsEditPage create />} />
+          <ProtectedRoute path="/news/:newsId/edit" component={NewsEditPage} />
+          <ProtectedRoute path="/news/new" component={() => <NewsEditPage create />} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
           <Route exact path="/" component={NewsPage} />
         </Switch>
