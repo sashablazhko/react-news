@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import Loader from "../../UI/Loader/Loader";
 import NewsCard from "../../NewsCard/NewsCard";
 
-import { loadAllNews, deleteNews, moduleName } from "../../../ducks/news";
+import { loadAllNews, deleteNews, handleSearchTermChange, moduleName } from "../../../ducks/news";
 import { mapToArr } from "../../../helpers";
 import bg from "../../../resources/images/bg.jpg";
+import Search from "../../Search/Search";
 
 export class NewsPage extends Component {
   componentDidMount() {
@@ -15,7 +16,7 @@ export class NewsPage extends Component {
   }
 
   render() {
-    const { news, loadingList, userId, authorized } = this.props;
+    const { news, loadingList, userId, authorized, handleSearchTermChange } = this.props;
     if (loadingList) return <Loader />;
     const newsElements = mapToArr(news).map(item => (
       <NewsCard
@@ -28,6 +29,9 @@ export class NewsPage extends Component {
 
     return (
       <div className={classes.NewsPage} style={{ background: `url(${bg})` }}>
+        <div className="container container__padding background">
+          <Search handleSearchTermChange={handleSearchTermChange} />
+        </div>
         <div className="container container__padding background">
           <ul>{newsElements}</ul>
         </div>
@@ -44,5 +48,5 @@ export default connect(
     userId: state.auth.user.id,
     authorized: state.auth.user.expirationDate && new Date() < state.auth.user.expirationDate,
   }),
-  { loadAllNews, deleteNews }
+  { loadAllNews, deleteNews, handleSearchTermChange }
 )(NewsPage);

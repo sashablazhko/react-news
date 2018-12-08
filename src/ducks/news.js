@@ -25,6 +25,7 @@ const ReducerState = Record({
   loadingItem: false,
   error: null,
   errorMsg: null,
+  searchTerm: "",
 });
 
 export const moduleName = "news";
@@ -43,6 +44,7 @@ export const CREATE_NEWS_ERROR = `${moduleName}/CREATE_NEWS_ERROR`;
 export const DELETE_NEWS = `${moduleName}/DELETE_NEWS`;
 export const DELETE_NEWS_SUCCESS = `${moduleName}/DELETE_NEWS_SUCCESS`;
 export const DELETE_NEWS_ERROR = `${moduleName}/DELETE_NEWS_ERROR`;
+export const SET_SEARCH_TERM = `${moduleName}/SET_SEARCH_TERM`;
 
 export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
@@ -101,6 +103,9 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loadingItem", false)
         .set("error", true)
         .set("errorMsg", "Проблемы с удалением");
+
+    case SET_SEARCH_TERM:
+      return state.set("searchTerm", payload);
 
     default:
       return state;
@@ -276,6 +281,13 @@ const deleteNewsSaga = function*() {
     }
   }
 };
+
+export function handleSearchTermChange(searchTerm) {
+  return {
+    type: SET_SEARCH_TERM,
+    payload: searchTerm,
+  };
+}
 
 export const saga = function*() {
   yield all([editNewsSaga(), createNewsSaga(), deleteNewsSaga()]);

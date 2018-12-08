@@ -14,6 +14,7 @@ const UserRecord = Record({
 const ReducerState = Record({
   user: new UserRecord(),
   loading: false,
+  redirectToReferrer: false,
   error: null,
   errorMsg: null,
 });
@@ -59,6 +60,7 @@ export default function reducer(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
+        .set("redirectToReferrer", true)
         .setIn(["user", "id"], payload.id)
         .setIn(["user", "accessToken"], payload.accessToken)
         .setIn(["user", "email"], payload.email)

@@ -27,10 +27,10 @@ export class Drawer extends Component {
 
     if (this.props.authorized) {
       links.push({ to: "/news/new", label: "Создать новость", exact: false });
-      links.push({ to: "/news/my", label: "Мои новости", exact: false });
     } else {
       links.push({ to: "/auth/signin", label: "Вход", exact: false });
     }
+    links.push({ to: "/news/my", label: "Мой кабинет", exact: false });
 
     return (
       <React.Fragment>

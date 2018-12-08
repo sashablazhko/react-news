@@ -10,8 +10,8 @@ import NewsDetailPage from "../pages/NewsDetailPage/NewsDetailPage";
 import NewsEditPage from "../pages/NewsEditPage/NewsEditPage";
 import AuthPage from "../pages/AuthPage/AuthPage";
 
-const AsyncMyNewsPage = Loadable({
-  loader: () => import("../pages/MyNewsPage/MyNewsPage"),
+const AsyncMyCabinet = Loadable({
+  loader: () => import("../pages/MyCabinet/MyCabinet"),
   loading: Loader,
 });
 
@@ -20,9 +20,9 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
-          <ProtectedRoute path="/news/my" component={AsyncMyNewsPage} />
           <ProtectedRoute path="/news/:newsId/edit" component={NewsEditPage} />
           <ProtectedRoute path="/news/new" component={() => <NewsEditPage create />} />
+          <ProtectedRoute path="/news/my" component={AsyncMyCabinet} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
           <Route path="/auth/signin" component={AuthPage} />
           <Route exact path="/" component={NewsPage} />

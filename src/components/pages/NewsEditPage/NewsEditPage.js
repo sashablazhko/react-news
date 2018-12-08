@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import { createNews, editNews, deleteNews, moduleName, loadNewsItem } from "../../../ducks/news";
 import NewsEdit from "../../NewsEdit/NewsEdit";
-import Loader from "../../UI/Loader/Loader";
 
 class NewsEditPage extends Component {
   state = {};
@@ -20,20 +19,22 @@ class NewsEditPage extends Component {
   handleDelete = () => this.props.deleteNews(this.props.item._id);
 
   render() {
-    // if (this.props.loadingItem || !this.props.loadedItem) return <Loader />;
+    const { item } = this.props;
 
     const editOrCreate = () => {
       if (this.props.create) {
         return <NewsEdit onSubmit={this.handleCreate} loading={this.props.loadingItem} chancelPath="/" />;
-      } else {
+      } else if (item) {
         return (
           <NewsEdit
             onSubmit={this.handleEdit}
             item={this.props.item}
             loading={this.props.loadingItem}
-            chancelPath={`/news/${this.props.item._id}`}
+            chancelPath={`/news/${item._id}`}
           />
         );
+      } else {
+        return null;
       }
     };
     return (

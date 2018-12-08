@@ -1,0 +1,9 @@
+.Search input{
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid rgba(140,67,67,1);
+  margin: 0; padding: 0;
+  padding: 5px;
+  outline: none;
+}
