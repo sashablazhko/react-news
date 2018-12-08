@@ -15,13 +15,13 @@ export class NewsPage extends Component {
   }
 
   render() {
-    const { news, loadingList, userId } = this.props;
+    const { news, loadingList, userId, authorized } = this.props;
     if (loadingList) return <Loader />;
     const newsElements = mapToArr(news).map(item => (
       <NewsCard
         deleteNews={() => window.confirm("Вы точно хотите удалить новость?") && this.props.deleteNews(item._id)}
         key={item._id}
-        usersNews={userId === item.creator._id}
+        usersNews={authorized && userId === item.creator._id}
         {...item.toJS()}
       />
     ));
@@ -42,6 +42,7 @@ export default connect(
     loadedList: state[moduleName].loadedList,
     loadingList: state[moduleName].loadingList,
     userId: state.auth.user.id,
+    authorized: state.auth.user.expirationDate && new Date() < state.auth.user.expirationDate,
   }),
   { loadAllNews, deleteNews }
 )(NewsPage);

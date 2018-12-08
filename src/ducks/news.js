@@ -61,7 +61,7 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loadingList", false)
         .set("loadedList", true)
         .set("error", null)
-        .update("entities", entities => entities.merge(arrToMap(payload.news, "_id", NewsRecord)));
+        .update("entities", entities => arrToMap(payload.news, "_id", NewsRecord).merge(entities));
 
     case API_NEWS_ITEM_SECCESS:
       return state

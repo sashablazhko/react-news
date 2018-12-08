@@ -8,6 +8,7 @@ import Loader from "../UI/Loader/Loader";
 import NewsPage from "../pages/NewsPage/NewsPage";
 import NewsDetailPage from "../pages/NewsDetailPage/NewsDetailPage";
 import NewsEditPage from "../pages/NewsEditPage/NewsEditPage";
+import AuthPage from "../pages/AuthPage/AuthPage";
 
 const AsyncMyNewsPage = Loadable({
   loader: () => import("../pages/MyNewsPage/MyNewsPage"),
@@ -23,6 +24,7 @@ class App extends Component {
           <ProtectedRoute path="/news/:newsId/edit" component={NewsEditPage} />
           <ProtectedRoute path="/news/new" component={() => <NewsEditPage create />} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
+          <Route path="/auth/signin" component={AuthPage} />
           <Route exact path="/" component={NewsPage} />
         </Switch>
       </Layout>

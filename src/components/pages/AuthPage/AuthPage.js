@@ -2,26 +2,21 @@ import React from "react";
 import classes from "./AuthPage.module.css";
 import { connect } from "react-redux";
 
-import { signUp, signIn, moduleName } from "../../../ducks/auth";
+import { signInGoogle, moduleName } from "../../../ducks/auth";
 import SignIn from "../../auth/SignIn/SignIn";
-import SignUp from "../../auth/SignUp/SignUp";
+import bg from "../../../resources/images/bg.jpg";
 
 const AuthPage = props => {
-  const handleSignIn = ({ email, password }) => props.signIn(email, password);
-  const handleSignUp = ({ email, password }) => props.signUp(email, password);
-
-  const renderBody = () => {
-    if (props.singup) {
-      return <SignUp onSubmit={handleSignUp} loading={props.loading} />;
-    } else {
-      return <SignIn onSubmit={handleSignIn} loading={props.loading} />;
-    }
+  const signInGoogle = () => {
+    props.signInGoogle();
   };
 
   return (
-    <div className={classes.AuthPage} style={{ background: `url(${props.bg})` }}>
+    <div className={classes.AuthPage} style={{ background: `url(${bg})` }}>
       <div className="container container__padding container__small">
-        <div className="centerblock background">{renderBody()}</div>
+        <div className="centerblock background">
+          <SignIn signInGoogle={signInGoogle} loading={props.loading} />
+        </div>
       </div>
     </div>
   );
@@ -29,5 +24,5 @@ const AuthPage = props => {
 
 export default connect(
   state => ({ loading: state[moduleName].loading }),
-  { signUp, signIn }
+  { signInGoogle }
 )(AuthPage);

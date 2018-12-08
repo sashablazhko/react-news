@@ -238,8 +238,11 @@ const singInGoogleRefreshSaga = function*(action) {
           expirationDate: new Date(serverAuthRes.exp * 1000),
         },
       });
-    } catch (e) {
-      debugger;
+    } catch (err) {
+      yield put({
+        type: SIGN_IN_REFRESH_ERROR,
+        err,
+      });
     }
 
     yield put({
@@ -247,9 +250,7 @@ const singInGoogleRefreshSaga = function*(action) {
       payload: { ms: action.payload.ms },
     });
   } else {
-    yield put({
-      type: SIGN_IN_REFRESH_ERROR,
-    });
+    console.log("Auto Refresh Token is stopped");
   }
   // }
 };

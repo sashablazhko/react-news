@@ -23,7 +23,7 @@ export class NewsDetailPage extends Component {
       month: "long",
       day: "2-digit",
     }).format(new Date(createDate));
-    const usersNews = this.props.userId === this.props.item.creator._id;
+    const usersNews = this.props.authorized && this.props.userId === this.props.item.creator._id;
     return (
       <div className={classes.NewsDetailPage}>
         <div className="container">
@@ -71,6 +71,7 @@ export default connect(
       loadingItem: state[moduleName].loadingItem,
       loadedItem: state[moduleName].entities.has(ownProps.match.params.newsId),
       userId: state.auth.user.id,
+      authorized: state.auth.user.expirationDate && new Date() < state.auth.user.expirationDate,
     };
   },
   { loadNewsItem, deleteNews }

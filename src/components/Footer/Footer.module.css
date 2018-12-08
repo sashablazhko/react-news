@@ -1,3 +1,6 @@
 .Footer{
   background-color: pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

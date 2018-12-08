@@ -11,11 +11,10 @@ export class ProtectedRoute extends Component {
 
   renderProtected = routeProps => {
     const { component: ProtectedComponent, authorized, location } = this.props;
-    console.log("authorized", authorized);
     return authorized ? (
       <ProtectedComponent {...routeProps} />
     ) : (
-      <Redirect to={{ pathname: "/", state: { from: location } }} />
+      <Redirect to={{ pathname: "/auth/signin", state: { from: location } }} />
     );
   };
 }

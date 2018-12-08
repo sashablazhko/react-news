@@ -12,3 +12,15 @@
   padding: 5px;
   position: relative;
 }
+
+.NewsDetailPage h2{
+  margin-top: 0px;
+  margin-bottom: 5px;
+  padding-right: 50px;
+}
+
+.NewsDetailPage .info{
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 15px;
+}
