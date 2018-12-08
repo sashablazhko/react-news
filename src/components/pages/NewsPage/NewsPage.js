@@ -18,7 +18,7 @@ export class NewsPage extends Component {
   render() {
     const { news, loadingList, userId, authorized, handleSearchTermChange } = this.props;
     if (loadingList) return <Loader />;
-    const newsElements = mapToArr(news).map(item => (
+    const newsElements = news.map(item => (
       <NewsCard
         deleteNews={() => window.confirm("Вы точно хотите удалить новость?") && this.props.deleteNews(item._id)}
         key={item._id}
@@ -41,12 +41,19 @@ export class NewsPage extends Component {
 }
 
 export default connect(
-  state => ({
-    news: state[moduleName].entities,
-    loadedList: state[moduleName].loadedList,
-    loadingList: state[moduleName].loadingList,
-    userId: state.auth.user.id,
-    authorized: state.auth.user.expirationDate && new Date() < state.auth.user.expirationDate,
-  }),
+  state => {
+    const filteredNews = mapToArr(state[moduleName].entities).filter(item => {
+      return `${item.title} ${item.content}`.toUpperCase().indexOf(state[moduleName].searchTerm.toUpperCase()) >= 0;
+    });
+    console.log("filteredNews", filteredNews);
+    return {
+      // news: state[moduleName].entities,
+      news: filteredNews,
+      loadedList: state[moduleName].loadedList,
+      loadingList: state[moduleName].loadingList,
+      userId: state.auth.user.id,
+      authorized: state.auth.user.expirationDate && new Date() < state.auth.user.expirationDate,
+    };
+  },
   { loadAllNews, deleteNews, handleSearchTermChange }
 )(NewsPage);
