@@ -19,19 +19,14 @@ class NewsEditPage extends Component {
   handleDelete = () => this.props.deleteNews(this.props.item._id);
 
   render() {
-    const { item } = this.props;
+    const { item, create, loadingItem } = this.props;
 
     const editOrCreate = () => {
-      if (this.props.create) {
-        return <NewsEdit onSubmit={this.handleCreate} loading={this.props.loadingItem} chancelPath="/" />;
+      if (create) {
+        return <NewsEdit onSubmit={this.handleCreate} loading={loadingItem} chancelPath="/" />;
       } else if (item) {
         return (
-          <NewsEdit
-            onSubmit={this.handleEdit}
-            item={this.props.item}
-            loading={this.props.loadingItem}
-            chancelPath={`/news/${item._id}`}
-          />
+          <NewsEdit onSubmit={this.handleEdit} item={item} loading={loadingItem} chancelPath={`/news/${item._id}`} />
         );
       } else {
         return null;

@@ -23,13 +23,13 @@ class Search extends Component {
   }
 
   render() {
+    const { initData } = this.props;
     return (
       <div className={classes.Search}>
-        <Form onSubmit={this.onSubmit}>
+        <Form onSubmit={this.onSubmit} initialValues={initData}>
           {({ handleSubmit, values }) => (
             <form onSubmit={handleSubmit}>
               <SearchField name="searchTerm" component="input" placeholder="Поиск" onChange={this.debouncedOnChange} />
-              <pre>{JSON.stringify(values, null, 4)}</pre>
             </form>
           )}
         </Form>

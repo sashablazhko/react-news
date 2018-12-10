@@ -22,7 +22,7 @@ class App extends Component {
         <Switch>
           <ProtectedRoute path="/news/:newsId/edit" component={NewsEditPage} />
           <ProtectedRoute path="/news/new" component={() => <NewsEditPage create />} />
-          <ProtectedRoute path="/news/my" component={AsyncMyCabinet} />
+          <Route path="/news/my" component={AsyncMyCabinet} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
           <Route path="/auth/signin" component={AuthPage} />
           <Route exact path="/" component={NewsPage} />

@@ -8,7 +8,7 @@ import Button from "../UI/Button/Button";
 
 export class NewsEdit extends Component {
   render() {
-    const { item } = this.props;
+    const { item, onSubmit, chancelPath, loading } = this.props;
 
     // const sleep = ms => new Promise(res => setTimeout(res, ms));
     // const showResult = async val => {
@@ -26,7 +26,7 @@ export class NewsEdit extends Component {
     return (
       <div className={classes.NewsEdit}>
         <h2>{!item ? "Создать новость" : "Редактировать новость"}</h2>
-        <Form onSubmit={this.props.onSubmit} initialValues={initData}>
+        <Form onSubmit={onSubmit} initialValues={initData}>
           {({ handleSubmit, values, submitting }) => (
             <form onSubmit={handleSubmit}>
               <Field name="title" placeholder="Заголовок" validate={validateTitle}>
@@ -51,11 +51,11 @@ export class NewsEdit extends Component {
                 <Button type="submit" view="primary">
                   {!item ? "Создать" : "Сохранить"}
                 </Button>
-                <Link to={this.props.chancelPath}>
+                <Link to={chancelPath}>
                   <Button view="danger">Отменить</Button>
                 </Link>
               </div>
-              {this.props.loading && <Loader />}
+              {loading && <Loader />}
             </form>
           )}
         </Form>

@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { Field, FormSpy } from "react-final-form";
+import React from "react";
+import { Field } from "react-final-form";
 
 class MyFieldAdapter extends React.Component {
   componentDidUpdate(prevProps) {

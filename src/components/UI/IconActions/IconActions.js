@@ -1,16 +1,15 @@
 import React from "react";
-import classes from "./IconActions.module.css";
 import { Link } from "react-router-dom";
 
-const IconActions = props => {
+const IconActions = ({ id, deleteNews }) => {
   return (
     <div className="action">
       <div className="edit">
-        <Link to={`/news/${props.id}/edit`}>
+        <Link to={`/news/${id}/edit`}>
           <i className="fas fa-pencil-alt" />
         </Link>
       </div>
-      <div className="del" onClick={props.deleteNews}>
+      <div className="del" onClick={deleteNews}>
         <i className="fas fa-times" />
       </div>
     </div>

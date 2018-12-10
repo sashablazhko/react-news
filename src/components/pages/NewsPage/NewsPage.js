@@ -5,7 +5,7 @@ import Loader from "../../UI/Loader/Loader";
 import NewsCard from "../../NewsCard/NewsCard";
 
 import { loadAllNews, deleteNews, handleSearchTermChange, moduleName } from "../../../ducks/news";
-import { mapToArr } from "../../../helpers";
+import { filteredNewsSelector } from "../../../selectors";
 import bg from "../../../resources/images/bg.jpg";
 import Search from "../../Search/Search";
 
@@ -16,7 +16,7 @@ export class NewsPage extends Component {
   }
 
   render() {
-    const { news, loadingList, userId, authorized, handleSearchTermChange } = this.props;
+    const { news, loadingList, userId, authorized, handleSearchTermChange, searchTerm } = this.props;
     if (loadingList) return <Loader />;
     const newsElements = news.map(item => (
       <NewsCard
@@ -30,7 +30,7 @@ export class NewsPage extends Component {
     return (
       <div className={classes.NewsPage} style={{ background: `url(${bg})` }}>
         <div className="container container__padding background">
-          <Search handleSearchTermChange={handleSearchTermChange} />
+          <Search handleSearchTermChange={handleSearchTermChange} initData={{ searchTerm }} />
         </div>
         <div className="container container__padding background">
           <ul>{newsElements}</ul>
@@ -42,13 +42,10 @@ export class NewsPage extends Component {
 
 export default connect(
   state => {
-    const filteredNews = mapToArr(state[moduleName].entities).filter(item => {
-      return `${item.title} ${item.content}`.toUpperCase().indexOf(state[moduleName].searchTerm.toUpperCase()) >= 0;
-    });
-    console.log("filteredNews", filteredNews);
     return {
       // news: state[moduleName].entities,
-      news: filteredNews,
+      news: filteredNewsSelector(state),
+      searchTerm: state[moduleName].searchTerm,
       loadedList: state[moduleName].loadedList,
       loadingList: state[moduleName].loadingList,
       userId: state.auth.user.id,

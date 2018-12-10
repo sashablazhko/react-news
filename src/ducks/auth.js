@@ -1,7 +1,7 @@
 import Auth from "../services/AuthService";
 import { Record } from "immutable";
 import { delay } from "redux-saga";
-import { take, takeEvery, put, call, select, fork, cancel, cancelled } from "redux-saga/effects";
+import { takeEvery, put, call, select } from "redux-saga/effects";
 
 const UserRecord = Record({
   id: null,
@@ -20,9 +20,6 @@ const ReducerState = Record({
 });
 
 export const moduleName = "auth";
-export const SIGN_UP_REQUEST = `${moduleName}/SIGN_UP_REQUEST`;
-export const SIGN_UP_SUCCESS = `${moduleName}/SIGN_UP_SUCCESS`;
-export const SIGN_UP_ERROR = `${moduleName}/SIGN_UP_ERROR`;
 export const SIGN_IN_REQUEST = `${moduleName}/SIGN_IN_REQUEST`;
 export const SIGN_IN_SUCCESS = `${moduleName}/SIGN_IN_SUCCESS`;
 export const SIGN_IN_ERROR = `${moduleName}/SIGN_IN_ERROR`;
@@ -38,21 +35,6 @@ export default function reducer(state = new ReducerState(), action) {
   const { type, payload } = action;
 
   switch (type) {
-    case SIGN_UP_REQUEST:
-      return state.set("loading", true);
-
-    case SIGN_UP_SUCCESS:
-      return state
-        .set("loading", false)
-        .set("error", null)
-        .set("errorMsg", null);
-
-    case SIGN_UP_ERROR:
-      return state
-        .set("loading", false)
-        .set("error", true)
-        .set("errorMsg", "Проблемы с регистрацией");
-
     case SIGN_IN_REQUEST:
       return state.set("loading", true);
 
@@ -170,49 +152,13 @@ export function signOutGoogle() {
 }
 
 export function singInGoogleRefresh(ms = 1000 * 60 * 55) {
-  console.log("1111", 1111);
   return {
     type: SIGN_IN_REFRESH,
     payload: { ms },
   };
 }
 
-// function* bgSync() {
-//   try {
-//     while (true) {
-//       yield put({
-//         type: SIGN_IN_REFRESH_REQUEST,
-//       });
-//     }
-//   } finally {
-//     if (yield cancelled())
-//       // yield put(actions.requestFailure('Sync cancelled!'))
-//       yield put({
-//         type: SIGN_IN_REFRESH_ERROR,
-//       });
-//   }
-// }
-
-// function* hasToken(){
-//   const getToken = state => state.auth.user.accessToken;
-//   const token = yield select(getToken);
-// }
-
-// const singInGoogleRefreshSaga = function*() {
-//   const action = yield take(SIGN_IN_REFRESH);
-//   while (true) {
-//     // starts the task in the background
-//     yield call(delay, 5000);
-
-//     yield all([call(bgSync), call(hasToken)]) ;
-
-//   }
-// };
-
 const singInGoogleRefreshSaga = function*(action) {
-  // while (true) {
-  // const action = yield take(SIGN_IN_REFRESH);
-  // console.log("action", action);
   yield call(delay, action.payload.ms);
   const getToken = state => state.auth.user.accessToken;
   const token = yield select(getToken);
@@ -254,12 +200,8 @@ const singInGoogleRefreshSaga = function*(action) {
   } else {
     console.log("Auto Refresh Token is stopped");
   }
-  // }
 };
 
-// export const saga = function*() {
-//   yield all([singInGoogleRefreshSaga()]);
-// };
 export const saga = function*() {
   yield [takeEvery(SIGN_IN_REFRESH, singInGoogleRefreshSaga)];
 };

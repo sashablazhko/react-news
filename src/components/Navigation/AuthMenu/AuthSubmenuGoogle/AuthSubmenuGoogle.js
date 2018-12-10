@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 
 import { signInGoogle, signOutGoogle } from "../../../../ducks/auth";
 
-const AuthSubmenuGoogle = props => {
-  const renderBody = props.authorized ? (
-    <li onClick={props.signOutGoogle}>Выйти</li>
+const AuthSubmenuGoogle = ({ authorized, signOutGoogle, signInGoogle }) => {
+  const renderBody = authorized ? (
+    <li onClick={signOutGoogle}>Выйти</li>
   ) : (
-    <li onClick={props.signInGoogle}>Войти через google</li>
+    <li onClick={signInGoogle}>Войти через google</li>
   );
   return renderBody;
 };

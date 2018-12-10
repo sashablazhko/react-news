@@ -21,11 +21,13 @@ export class Drawer extends Component {
   }
 
   render() {
-    const cls = [classes.Drawer, this.props.isOpen ? "" : classes.close];
+    const { isOpen, authorized, onClose } = this.props;
+
+    const cls = [classes.Drawer, isOpen ? "" : classes.close];
 
     const links = [{ to: "/", label: "На главную", exact: true }];
 
-    if (this.props.authorized) {
+    if (authorized) {
       links.push({ to: "/news/new", label: "Создать новость", exact: false });
     } else {
       links.push({ to: "/auth/signin", label: "Вход", exact: false });
@@ -37,7 +39,7 @@ export class Drawer extends Component {
         <nav className={cls.join(" ")}>
           <ul>{this.renderLinks(links)}</ul>
         </nav>
-        {this.props.isOpen ? <Backdrop onClick={this.props.onClose} /> : null}
+        {isOpen ? <Backdrop onClick={onClose} /> : null}
       </React.Fragment>
     );
   }
