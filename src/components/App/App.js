@@ -9,6 +9,7 @@ import NewsPage from "../pages/NewsPage/NewsPage";
 import NewsDetailPage from "../pages/NewsDetailPage/NewsDetailPage";
 import NewsEditPage from "../pages/NewsEditPage/NewsEditPage";
 import AuthPage from "../pages/AuthPage/AuthPage";
+import NotFound from "../pages/NotFound/NotFound";
 
 const AsyncMyCabinet = Loadable({
   loader: () => import("../pages/MyCabinet/MyCabinet"),
@@ -26,6 +27,7 @@ class App extends Component {
           <Route path="/news/:newsId" component={NewsDetailPage} />
           <Route path="/auth/signin" component={AuthPage} />
           <Route exact path="/" component={NewsPage} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </Layout>
     );

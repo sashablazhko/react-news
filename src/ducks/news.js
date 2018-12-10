@@ -159,6 +159,7 @@ export function loadNewsItem(newsId) {
           type: FETCH_NEWS_ITEM_ERROR,
           err,
         });
+        dispatch(push("/notfound"));
       }
     );
   };
