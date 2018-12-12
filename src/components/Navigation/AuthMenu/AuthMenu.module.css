@@ -50,6 +50,11 @@
   min-width: 190px;
 }
 
+.AuthMenu .submenu li a{
+  color: #fff;
+  text-decoration: none;
+}
+
 .AuthMenu .submenu li:hover{
   opacity: .7;
 }

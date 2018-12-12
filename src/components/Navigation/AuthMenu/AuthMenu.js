@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import classes from "./AuthMenu.module.css";
 import { connect } from "react-redux";
 import { moduleName } from "../../../ducks/auth";
-import AuthSubmenuGoogle from "./AuthSubmenuGoogle/AuthSubmenuGoogle";
+import AuthSubmenu from "./AuthSubmenu/AuthSubmenu";
 
 export class AuthMenu extends Component {
   render() {
-    const { authorized, name } = this.props;
+    const { authorized, name, email } = this.props;
     return (
       <div className={classes.AuthMenu}>
         {!!authorized && <i className="fas fa-user" />}
@@ -19,7 +19,7 @@ export class AuthMenu extends Component {
           )}
 
           <ul className={classes.submenu}>
-            <AuthSubmenuGoogle authorized={authorized} />
+            <AuthSubmenu authorized={authorized} email={email} />
           </ul>
         </div>
       </div>
@@ -32,6 +32,7 @@ export default connect(
     return {
       authorized: state[moduleName].user.expirationDate && new Date() < state[moduleName].user.expirationDate,
       name: state[moduleName].user.name,
+      email: state[moduleName].user.email,
     };
   },
   null,

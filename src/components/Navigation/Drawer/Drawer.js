@@ -30,7 +30,7 @@ export class Drawer extends Component {
     if (authorized) {
       links.push({ to: "/news/new", label: "Создать новость", exact: false });
     } else {
-      links.push({ to: "/auth/signin", label: "Вход", exact: false });
+      links.push({ to: "/login", label: "Вход", exact: false });
     }
     links.push({ to: "/news/my", label: "Мой кабинет", exact: false });
 

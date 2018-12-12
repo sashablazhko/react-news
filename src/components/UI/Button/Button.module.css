@@ -38,3 +38,8 @@
 .primary {
   background: rgba(140,67,67,1);
 }
+
+.disable{
+  background: rgba(101,101,101,1);
+  cursor: not-allowed;
+}

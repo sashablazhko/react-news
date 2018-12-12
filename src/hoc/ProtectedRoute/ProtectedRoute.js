@@ -14,7 +14,7 @@ export class ProtectedRoute extends Component {
     return authorized ? (
       <ProtectedComponent {...routeProps} />
     ) : (
-      <Redirect to={{ pathname: "/auth/signin", state: { from: location } }} />
+      <Redirect to={{ pathname: "/login", state: { from: location } }} />
     );
   };
 }

@@ -25,7 +25,8 @@ class App extends Component {
           <ProtectedRoute path="/news/new" component={() => <NewsEditPage create />} />
           <Route path="/news/my" component={AsyncMyCabinet} />
           <Route path="/news/:newsId" component={NewsDetailPage} />
-          <Route path="/auth/signin" component={AuthPage} />
+          <Route path="/login" component={AuthPage} />
+          <Route path="/signup" component={props => <AuthPage signup {...props} />} />
           <Route exact path="/" component={NewsPage} />
           <Route path="*" component={NotFound} />
         </Switch>
